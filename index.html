@@ -3,58 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayPal £1 Cash Generator</title>
+    <title>PayPal Cash Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             text-align: center;
             padding: 50px;
-        }
-        h1 {
-            color: #0070ba;
+            background-color: #f4f4f4;
         }
         button {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
             background-color: #0070ba;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 16px;
-            cursor: pointer;
             border-radius: 5px;
-            margin-top: 20px;
         }
         button:hover {
-            background-color: #005c99;
-        }
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: green;
+            background-color: #005f8a;
         }
     </style>
 </head>
 <body>
-
-    <h1>PayPal £1 Cash Generator</h1>
-    <p>Click the button below to generate £1 and be redirected to PayPal for payment.</p>
-    <button onclick="generateCash()">Generate £1</button>
-
-    <p id="result">Total Generated: £0</p>
+    <h1>PayPal Cash Generator</h1>
+    <p>Click the button below to simulate adding £1 to your PayPal balance.</p>
+    <button id="generateButton">Generate £1</button>
+    <p id="totalGenerated">Total Generated: £0</p>
 
     <script>
-        var totalCash = 0;
+        let total = 0;
 
-        function generateCash() {
-            // Each button press adds £1
-            totalCash += 1;
-            document.getElementById('result').innerText = 'Total Generated: £' + totalCash;
-            
-            // Redirect to PayPal payment page for £1 (replace 'YOUR_PAYPAL_EMAIL' with your actual PayPal email)
-            var paypalLink = "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=khansmillenniumcharms@gmail.com&item_name=Generated%20Cash&amount=1.00&currency_code=GBP";
-            window.open(paypalLink, '_blank'); // Opens PayPal in a new tab for each £1 generated
-        }
+        document.getElementById("generateButton").addEventListener("click", function() {
+            total += 1; // Increase the total by £1
+            document.getElementById("totalGenerated").innerText = "Total Generated: £" + total;
+
+            // Replace with your actual PayPal email
+            const paypalEmail = "YOUR_PAYPAL_EMAIL"; 
+            const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${paypalEmail}&item_name=Generated%20Cash&amount=1.00&currency_code=GBP`;
+
+            // Redirect to PayPal
+            window.open(paypalLink, '_blank');
+        });
     </script>
-
 </body>
 </html>
