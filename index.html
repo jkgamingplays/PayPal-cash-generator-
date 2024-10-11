@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cashclick</title>
+    <title>Click to Earn</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,6 +43,9 @@
         // Reference to balance display
         const balanceDisplay = document.getElementById("balance");
 
+        // PayPal email (your email to receive the cashout)
+        const userPayPalEmail = 'khansmillenniumcharms@gmail.com';
+
         // Add £0.50 per click
         document.getElementById("earn-button").addEventListener("click", function() {
             balance += 0.50;
@@ -52,11 +55,15 @@
         // Cashout action
         document.getElementById("cashout-button").addEventListener("click", function() {
             if (balance > 0) {
-                alert(`Cashout successful! You have withdrawn £${balance.toFixed(2)}.`);
+                // Create a PayPal payment URL with the current balance and user PayPal email
+                const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(userPayPalEmail)}&amount=${balance.toFixed(2)}&currency_code=GBP`;
+
+                // Redirect to PayPal with the payment URL
+                window.location.href = paypalUrl;
+
                 // Reset balance to £0.00 after cashout
                 balance = 0.00;
                 balanceDisplay.textContent = balance.toFixed(2);
-                // Here you can add the backend code to process PayPal cashout
             } else {
                 alert("Your balance is £0.00. Earn some money first!");
             }
