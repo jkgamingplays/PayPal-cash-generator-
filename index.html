@@ -9,6 +9,7 @@
 
         function setCashout(amount) {
             cashoutAmount = amount;
+            document.getElementById('displayAmount').innerText = `Current Cashout Amount: £${cashoutAmount.toFixed(2)}`;
             alert(`You have selected to cash out £${amount}. Click "Cashout" to proceed.`);
         }
 
@@ -19,13 +20,15 @@
             }
 
             // Redirect to PayPal for verification
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=your-paypal-email@example.com&item_name=Cashout&amount=${cashoutAmount}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel`;
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=your-paypal-email@example.com&item_name=Cashout&amount=${cashoutAmount.toFixed(2)}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel`;
             window.location.href = paypalUrl; // Redirect to PayPal
         }
     </script>
 </head>
 <body>
     <h1>Cashout Options</h1>
+    <div id="displayAmount">Current Cashout Amount: £0.00</div>
+    <br>
     <button onclick="setCashout(1)">Cashout £1</button>
     <button onclick="setCashout(2)">Cashout £2 (X2)</button>
     <button onclick="setCashout(7)">Cashout £7 (X7)</button>
