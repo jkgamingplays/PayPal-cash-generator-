@@ -5,55 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cashout Feature</title>
     <script>
+        let cashoutAmount = 0; // Variable to store the current cashout amount
+
+        function setCashout(amount) {
+            cashoutAmount = amount;
+            alert(`You have selected to cash out £${amount}. Click "Cashout" to proceed.`);
+        }
+
         function cashout() {
-            // Replace with your actual API endpoint
-            const apiEndpoint = 'https://your-api-endpoint.com/cashout'; 
-            const amountToCashout = 0.50; // Amount to cash out
+            if (cashoutAmount === 0) {
+                alert('Please select an amount to cash out first.');
+                return;
+            }
 
-            // Create the request payload
-            const payload = {
-                amount: amountToCashout,
-                message: 'Please add this amount to your PayPal wallet.'
-            };
-
-            // Disable the button to prevent multiple clicks
-            const button = document.getElementById('cashoutButton');
-            button.disabled = true;
-            button.innerText = 'Processing...';
-
-            // Send the API call
-            fetch(apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            })
-            .then(data => {
-                // Handle the success response
-                alert(data.message || 'Cashout request successful!');
-                button.innerText = 'Cashout £0.50'; // Reset button text
-                button.disabled = false; // Re-enable the button
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error('There was a problem with the fetch operation:', error);
-                alert('An error occurred: ' + error.message);
-                button.innerText = 'Cashout £0.50'; // Reset button text
-                button.disabled = false; // Re-enable the button
-            });
+            // Redirect to PayPal for verification
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=your-paypal-email@example.com&item_name=Cashout&amount=${cashoutAmount}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel`;
+            window.location.href = paypalUrl; // Redirect to PayPal
         }
     </script>
 </head>
 <body>
-    <h1>Cashout</h1>
-    <button id="cashoutButton" onclick="cashout()">Cashout £0.50</button>
+    <h1>Cashout Options</h1>
+    <button onclick="setCashout(1)">Cashout £1</button>
+    <button onclick="setCashout(2)">Cashout £2 (X2)</button>
+    <button onclick="setCashout(7)">Cashout £7 (X7)</button>
+    <button onclick="setCashout(100)">Cashout £100 (Bonus)</button>
+    <br><br>
+    <button onclick="cashout()">Cashout</button>
 </body>
 </html>
