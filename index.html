@@ -3,48 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayPal Cash Generator</title>
+    <title>cashclick</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
-            background-color: #f4f4f4;
+            margin-top: 50px;
         }
-        button {
+        .balance {
+            font-size: 24px;
+            margin: 20px;
+        }
+        .button {
             padding: 10px 20px;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
-            background-color: #0070ba;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            margin: 10px;
         }
-        button:hover {
-            background-color: #005f8a;
+        .cashout-button {
+            background-color: green;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>PayPal Cash Generator</h1>
-    <p>Click the button below to simulate adding £1 to your PayPal balance.</p>
-    <button id="generateButton">Generate £1</button>
-    <p id="totalGenerated">Total Generated: £0</p>
+
+    <h1>Earn £0.50 per Click!</h1>
+    <div class="balance">
+        Balance: £<span id="balance">0.00</span>
+    </div>
+
+    <button class="button" id="earn-button">Add £0.50</button>
+    <button class="button cashout-button" id="cashout-button">Cashout</button>
 
     <script>
-        let total = 0;
+        // Initialize the balance
+        let balance = 0.00;
 
-        document.getElementById("generateButton").addEventListener("click", function() {
-            total += 1; // Increase the total by £1
-            document.getElementById("totalGenerated").innerText = "Total Generated: £" + total;
+        // Reference to balance display
+        const balanceDisplay = document.getElementById("balance");
 
-            // Replace with your actual PayPal email
-            const paypalEmail = "YOUR_PAYPAL_EMAIL"; 
-            const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${paypalEmail}&item_name=Generated%20Cash&amount=1.00&currency_code=GBP`;
+        // Add £0.50 per click
+        document.getElementById("earn-button").addEventListener("click", function() {
+            balance += 0.50;
+            balanceDisplay.textContent = balance.toFixed(2); // Update balance on screen
+        });
 
-            // Redirect to PayPal
-            window.open(paypalLink, '_blank');
+        // Cashout action
+        document.getElementById("cashout-button").addEventListener("click", function() {
+            if (balance > 0) {
+                alert(`Cashout successful! You have withdrawn £${balance.toFixed(2)}.`);
+                // Reset balance to £0.00 after cashout
+                balance = 0.00;
+                balanceDisplay.textContent = balance.toFixed(2);
+                // Here you can add the backend code to process PayPal cashout
+            } else {
+                alert("Your balance is £0.00. Earn some money first!");
+            }
         });
     </script>
+
 </body>
 </html>
