@@ -19,8 +19,10 @@
                 return;
             }
 
+            // Construct PayPal URL
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=your-paypal-email@example.com&item_name=Cashout&amount=${cashoutAmount.toFixed(2)}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel&no_note=1&no_shipping=1`;
+
             // Redirect to PayPal for verification
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=your-paypal-email@example.com&item_name=Cashout&amount=${cashoutAmount.toFixed(2)}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel`;
             window.location.href = paypalUrl; // Redirect to PayPal
         }
     </script>
