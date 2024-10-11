@@ -16,6 +16,11 @@
                 message: 'Please add this amount to your PayPal wallet.'
             };
 
+            // Disable the button to prevent multiple clicks
+            const button = document.getElementById('cashoutButton');
+            button.disabled = true;
+            button.innerText = 'Processing...';
+
             // Send the API call
             fetch(apiEndpoint, {
                 method: 'POST',
@@ -34,17 +39,21 @@
             .then(data => {
                 // Handle the success response
                 alert(data.message || 'Cashout request successful!');
+                button.innerText = 'Cashout £0.50'; // Reset button text
+                button.disabled = false; // Re-enable the button
             })
             .catch(error => {
                 // Handle any errors
                 console.error('There was a problem with the fetch operation:', error);
-                alert('An error occurred. Please try again later.');
+                alert('An error occurred: ' + error.message);
+                button.innerText = 'Cashout £0.50'; // Reset button text
+                button.disabled = false; // Re-enable the button
             });
         }
     </script>
 </head>
 <body>
     <h1>Cashout</h1>
-    <button onclick="cashout()">Cashout £0.50</button>
+    <button id="cashoutButton" onclick="cashout()">Cashout £0.50</button>
 </body>
 </html>
