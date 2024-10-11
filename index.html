@@ -3,61 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click to Earn</title>
+    <title>Cashout Example</title>
 </head>
 <body>
-
-    <h1>Earn £0.50 per Click!</h1>
+    <h1>Cashout Example</h1>
     <div>
-        Balance: £<span id="balance">0.00</span>
+        <p>Current Balance: <span id="balance">£0.00</span></p>
+        <button id="add50p">Add £0.50</button>
+        <button id="cashout">Cashout</button>
     </div>
 
-    <button id="earn-button">Add £0.50</button>
-    <button id="cashout-button">Cashout</button>
-
     <script>
-        let balance = 0.00;
-        const balanceDisplay = document.getElementById("balance");
-        const userPayPalEmail = 'khansmillenniumcharms@gmail.com'; // Your PayPal email
+        let balance = 0;
 
-        // Event listener for the earning button
-        document.getElementById("earn-button").addEventListener("click", function() {
-            balance += 0.50; // Increase balance by 50p
-            balanceDisplay.textContent = balance.toFixed(2); // Update balance display
+        // Add 50p to balance
+        document.getElementById('add50p').addEventListener('click', function() {
+            balance += 0.50;
+            document.getElementById('balance').innerText = `£${balance.toFixed(2)}`;
         });
 
-        // Event listener for the cashout button
-        document.getElementById("cashout-button").addEventListener("click", async function() {
+        // Cashout function
+        document.getElementById('cashout').addEventListener('click', function() {
             if (balance > 0) {
-                const confirmation = confirm(`Are you sure you want to cash out £${balance.toFixed(2)} to ${userPayPalEmail}?`);
-                if (confirmation) {
-                    const response = await fetch('/api/cashout', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: userPayPalEmail, // Use the user's PayPal email
-                            amount: balance.toFixed(2) // Pass the current balance to cash out
-                        })
-                    });
-
-                    const result = await response.json();
-                    if (result.status === "success") {
-                        alert(result.message);
-                    } else {
-                        alert("Cashout failed: " + result.message);
-                    }
-
-                    // Reset balance after cashout
-                    balance = 0.00;
-                    balanceDisplay.textContent = balance.toFixed(2);
-                }
+                const cashoutAmount = balance.toFixed(2);
+                const paypalEmail = 'khansmillenniumcharms@gmail.com'; // Your PayPal email
+                
+                // Redirect to PayPal with a form
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://www.paypal.com/cgi-bin/webscr'; // PayPal's endpoint
+                
+                // Add necessary fields to the form
+                form.innerHTML = `
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="${paypalEmail}">
+                    <input type="hidden" name="item_name" value="Cashout">
+                    <input type="hidden" name="amount" value="${cashoutAmount}">
+                    <input type="hidden" name="currency_code" value="GBP">
+                    <input type="hidden" name="return" value="http://yourwebsite.com/success"> <!-- Success URL -->
+                    <input type="hidden" name="cancel_return" value="http://yourwebsite.com/cancel"> <!-- Cancel URL -->
+                `;
+                
+                document.body.appendChild(form);
+                form.submit(); // Submit the form to redirect to PayPal
             } else {
-                alert("Your balance is £0.00. Earn some money first!");
+                alert('You have no balance to cash out.');
             }
         });
     </script>
-
 </body>
 </html>
