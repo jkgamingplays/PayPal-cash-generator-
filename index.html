@@ -3,53 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashout Example</title>
+    <title>Cashout Feature</title>
+    <script>
+        function cashout() {
+            // Replace with your actual API endpoint
+            const apiEndpoint = 'https://your-api-endpoint.com/cashout'; 
+            const amountToCashout = 0.50; // Amount to cash out
+
+            // Create the request payload
+            const payload = {
+                amount: amountToCashout,
+                message: 'Please add this amount to your PayPal wallet.'
+            };
+
+            // Send the API call
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(data => {
+                // Handle the success response
+                alert(data.message || 'Cashout request successful!');
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('There was a problem with the fetch operation:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Cashout Example</h1>
-    <div>
-        <p>Current Balance: <span id="balance">£0.00</span></p>
-        <button id="add50p">Add £0.50</button>
-        <button id="cashout">Cashout</button>
-    </div>
-
-    <script>
-        let balance = 0;
-
-        // Add 50p to balance
-        document.getElementById('add50p').addEventListener('click', function() {
-            balance += 0.50;
-            document.getElementById('balance').innerText = `£${balance.toFixed(2)}`;
-        });
-
-        // Cashout function
-        document.getElementById('cashout').addEventListener('click', function() {
-            if (balance > 0) {
-                const cashoutAmount = balance.toFixed(2);
-                const paypalEmail = 'khansmillenniumcharms@gmail.com'; // Your PayPal email
-                
-                // Redirect to PayPal with a form
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'https://www.paypal.com/cgi-bin/webscr'; // PayPal's endpoint
-                
-                // Add necessary fields to the form
-                form.innerHTML = `
-                    <input type="hidden" name="cmd" value="_xclick">
-                    <input type="hidden" name="business" value="${paypalEmail}">
-                    <input type="hidden" name="item_name" value="Cashout">
-                    <input type="hidden" name="amount" value="${cashoutAmount}">
-                    <input type="hidden" name="currency_code" value="GBP">
-                    <input type="hidden" name="return" value="http://yourwebsite.com/success"> <!-- Success URL -->
-                    <input type="hidden" name="cancel_return" value="http://yourwebsite.com/cancel"> <!-- Cancel URL -->
-                `;
-                
-                document.body.appendChild(form);
-                form.submit(); // Submit the form to redirect to PayPal
-            } else {
-                alert('You have no balance to cash out.');
-            }
-        });
-    </script>
+    <h1>Cashout</h1>
+    <button onclick="cashout()">Cashout £0.50</button>
 </body>
 </html>
