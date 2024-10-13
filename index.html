@@ -3,39 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashout Feature</title>
-    <script>
-        let cashoutAmount = 0; // Variable to store the current cashout amount
-
-        function setCashout(amount) {
-            cashoutAmount = amount;
-            document.getElementById('displayAmount').innerText = `Current Cashout Amount: £${cashoutAmount.toFixed(2)}`;
-            alert(`You have selected to cash out £${amount}. Click "Cashout" to proceed.`);
+    <title>Cashout App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
         }
-
-        function cashout() {
-            if (cashoutAmount === 0) {
-                alert('Please select an amount to cash out first.');
-                return;
-            }
-
-            // Construct the PayPal URL with parameters
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=ActBvohs5C_m5NEthZcxKdza1UpVpH3FNNyq6xb1976nS7EMTZRsae-2hsONhVoPgTuROB4lDTUh00j4&item_name=Cashout&amount=${cashoutAmount.toFixed(2)}&currency_code=GBP&return=https://your-website.com/success&cancel_return=https://your-website.com/cancel&no_note=1&no_shipping=1`;
-
-            // Redirect to PayPal for verification
-            window.location.href = paypalUrl; // Redirect to PayPal
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
         }
-    </script>
+        #earnings {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cashout Options</h1>
-    <div id="displayAmount">Current Cashout Amount: £0.00</div>
-    <br>
-    <button onclick="setCashout(1)">Cashout £1</button>
-    <button onclick="setCashout(2)">Cashout £2 (X2)</button>
-    <button onclick="setCashout(7)">Cashout £7 (X7)</button>
-    <button onclick="setCashout(100)">Cashout £100 (Bonus)</button>
-    <br><br>
-    <button onclick="cashout()">Cashout</button>
+
+    <div id="earnings">£0.00</div>
+    <button id="earnButton">Earn £1</button>
+    <div id="cashoutContainer"></div>
+
+    <script>
+        let totalEarnings = 0;
+
+        // Function to update the earnings display
+        function updateEarnings() {
+            document.getElementById('earnings').innerText = '£' + totalEarnings.toFixed(2);
+        }
+
+        // Function to handle earning money
+        document.getElementById('earnButton').onclick = function() {
+            totalEarnings += 1; // Add £1
+            updateEarnings(); // Update the earnings display
+
+            // Show cashout button if earnings are greater than £0
+            if (totalEarnings > 0) {
+                showCashoutButton();
+            }
+        };
+
+        // Function to show the cashout button
+        function showCashoutButton() {
+            const cashoutContainer = document.getElementById('cashoutContainer');
+            if (!document.getElementById('cashoutButton')) {
+                const cashoutButton = document.createElement('button');
+                cashoutButton.id = 'cashoutButton';
+                cashoutButton.innerText = 'Cash Out';
+                cashoutButton.onclick = showCashoutOptions;
+                cashoutContainer.appendChild(cashoutButton);
+            }
+        }
+
+        // Function to show cashout options
+        function showCashoutOptions() {
+            const cashoutContainer = document.getElementById('cashoutContainer');
+
+            // Remove existing cashout options if they exist
+            const existingOptions = cashoutContainer.querySelectorAll('.cashout-option');
+            existingOptions.forEach(option => option.remove());
+
+            // Create cashout options
+            const paypalButton = document.createElement('button');
+            paypalButton.className = 'cashout-option';
+            paypalButton.innerText = 'Cash Out with PayPal';
+            paypalButton.onclick = () => alert('Cash out with PayPal selected!'); // Replace with your PayPal logic
+
+            const bankTransferButton = document.createElement('button');
+            bankTransferButton.className = 'cashout-option';
+            bankTransferButton.innerText = 'Cash Out with Bank Transfer';
+            bankTransferButton.onclick = () => alert('Cash out with Bank Transfer selected!'); // Replace with your bank transfer logic
+
+            cashoutContainer.appendChild(paypalButton);
+            cashoutContainer.appendChild(bankTransferButton);
+        }
+    </script>
 </body>
 </html>
