@@ -72,16 +72,35 @@
             const paypalButton = document.createElement('button');
             paypalButton.className = 'cashout-option';
             paypalButton.innerText = 'Cash Out with PayPal';
-            paypalButton.onclick = () => alert('Cash out with PayPal selected!'); // Replace with your PayPal logic
+            paypalButton.onclick = cashoutWithPayPal;
 
             const bankTransferButton = document.createElement('button');
             bankTransferButton.className = 'cashout-option';
             bankTransferButton.innerText = 'Cash Out with Bank Transfer';
-            bankTransferButton.onclick = () => alert('Cash out with Bank Transfer selected!'); // Replace with your bank transfer logic
+            bankTransferButton.onclick = cashoutWithBankTransfer;
 
             cashoutContainer.appendChild(paypalButton);
             cashoutContainer.appendChild(bankTransferButton);
         }
+
+        // Function to handle cashout with PayPal
+        function cashoutWithPayPal() {
+            // Redirect user or trigger PayPal payout
+            alert('Redirecting to PayPal...'); 
+            window.location.href = "https://www.paypal.com"; // Redirect to PayPal
+            // Alternatively, trigger the payout via an API call to your backend
+            // Example: fetch('/api/payout/paypal', { method: 'POST', body: JSON.stringify({ amount: totalEarnings }) });
+        }
+
+        // Function to handle cashout with Bank Transfer
+        function cashoutWithBankTransfer() {
+            // Redirect user to a form to enter bank details
+            alert('Redirecting to bank transfer form...');
+            window.location.href = "/bank-transfer"; // Redirect to your bank transfer page
+            // Alternatively, trigger the payout via an API call to your backend
+            // Example: fetch('/api/payout/bank-transfer', { method: 'POST', body: JSON.stringify({ amount: totalEarnings }) });
+        }
+
     </script>
 </body>
 </html>
