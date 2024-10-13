@@ -1,106 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashout App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        #earnings {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cashout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .cashout-options {
+      margin-top: 20px;
+    }
+    .input-field {
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
 
-    <div id="earnings">£0.00</div>
-    <button id="earnButton">Earn £1</button>
-    <div id="cashoutContainer"></div>
+  <h1>Click for Cash</h1>
+  <p>Current balance: £<span id="balance">0.00</span></p>
 
-    <script>
-        let totalEarnings = 0;
+  <button id="earnButton">Click to earn £1</button>
+  <button id="cashoutButton" class="hidden">Cashout</button>
 
-        // Function to update the earnings display
-        function updateEarnings() {
-            document.getElementById('earnings').innerText = '£' + totalEarnings.toFixed(2);
-        }
+  <div id="cashoutOptions" class="cashout-options hidden">
+    <h3>Select a cashout method:</h3>
+    <button id="paypalButton">Cashout with PayPal</button>
+    <button id="bankTransferButton">Cashout with Bank Transfer</button>
+  </div>
 
-        // Function to handle earning money
-        document.getElementById('earnButton').onclick = function() {
-            totalEarnings += 1; // Add £1
-            updateEarnings(); // Update the earnings display
+  <div id="bankDetails" class="hidden">
+    <h3>Enter your Bank Transfer details:</h3>
+    <div class="input-field">
+      <label for="sortCode">Sort Code:</label>
+      <input type="text" id="sortCode" maxlength="6" placeholder="Enter sort code">
+    </div>
+    <div class="input-field">
+      <label for="accountNumber">Account Number:</label>
+      <input type="text" id="accountNumber" maxlength="8" placeholder="Enter account number">
+    </div>
+    <button id="submitBankDetails">Submit Bank Transfer Details</button>
+  </div>
 
-            // Show cashout button if earnings are greater than £0
-            if (totalEarnings > 0) {
-                showCashoutButton();
-            }
-        };
+  <script>
+    let balance = 0;
 
-        // Function to show the cashout button
-        function showCashoutButton() {
-            const cashoutContainer = document.getElementById('cashoutContainer');
-            if (!document.getElementById('cashoutButton')) {
-                const cashoutButton = document.createElement('button');
-                cashoutButton.id = 'cashoutButton';
-                cashoutButton.innerText = 'Cash Out';
-                cashoutButton.onclick = showCashoutOptions;
-                cashoutContainer.appendChild(cashoutButton);
-            }
-        }
+    const balanceDisplay = document.getElementById("balance");
+    const earnButton = document.getElementById("earnButton");
+    const cashoutButton = document.getElementById("cashoutButton");
+    const cashoutOptions = document.getElementById("cashoutOptions");
+    const paypalButton = document.getElementById("paypalButton");
+    const bankTransferButton = document.getElementById("bankTransferButton");
+    const bankDetails = document.getElementById("bankDetails");
+    const submitBankDetails = document.getElementById("submitBankDetails");
 
-        // Function to show cashout options
-        function showCashoutOptions() {
-            const cashoutContainer = document.getElementById('cashoutContainer');
+    // Earn £1 each time the button is clicked
+    earnButton.addEventListener("click", () => {
+      balance += 1;
+      balanceDisplay.textContent = balance.toFixed(2);
+      
+      if (balance >= 1) {
+        cashoutButton.classList.remove("hidden");
+      }
+    });
 
-            // Remove existing cashout options if they exist
-            const existingOptions = cashoutContainer.querySelectorAll('.cashout-option');
-            existingOptions.forEach(option => option.remove());
+    // Show cashout options when "Cashout" button is clicked
+    cashoutButton.addEventListener("click", () => {
+      cashoutOptions.classList.remove("hidden");
+    });
 
-            // Create cashout options
-            const paypalButton = document.createElement('button');
-            paypalButton.className = 'cashout-option';
-            paypalButton.innerText = 'Cash Out with PayPal';
-            paypalButton.onclick = cashoutWithPayPal;
+    // Redirect to PayPal login when PayPal cashout is selected
+    paypalButton.addEventListener("click", () => {
+      window.location.href = "https://www.paypal.com/signin";
+    });
 
-            const bankTransferButton = document.createElement('button');
-            bankTransferButton.className = 'cashout-option';
-            bankTransferButton.innerText = 'Cash Out with Bank Transfer';
-            bankTransferButton.onclick = cashoutWithBankTransfer;
+    // Show bank details input fields when Bank Transfer is selected
+    bankTransferButton.addEventListener("click", () => {
+      bankDetails.classList.remove("hidden");
+    });
 
-            cashoutContainer.appendChild(paypalButton);
-            cashoutContainer.appendChild(bankTransferButton);
-        }
+    // Handle bank details submission
+    submitBankDetails.addEventListener("click", () => {
+      const sortCode = document.getElementById("sortCode").value;
+      const accountNumber = document.getElementById("accountNumber").value;
 
-        // Function to handle cashout with PayPal
-        function cashoutWithPayPal() {
-            // Redirect user or trigger PayPal payout
-            alert('Redirecting to PayPal...'); 
-            window.location.href = "https://www.paypal.com"; // Redirect to PayPal
-            // Alternatively, trigger the payout via an API call to your backend
-            // Example: fetch('/api/payout/paypal', { method: 'POST', body: JSON.stringify({ amount: totalEarnings }) });
-        }
-
-        // Function to handle cashout with Bank Transfer
-        function cashoutWithBankTransfer() {
-            // Redirect user to a form to enter bank details
-            alert('Redirecting to bank transfer form...');
-            window.location.href = "/bank-transfer"; // Redirect to your bank transfer page
-            // Alternatively, trigger the payout via an API call to your backend
-            // Example: fetch('/api/payout/bank-transfer', { method: 'POST', body: JSON.stringify({ amount: totalEarnings }) });
-        }
-
-    </script>
+      if (sortCode.length !== 6 || accountNumber.length !== 8) {
+        alert("Please enter valid bank details.");
+      } else {
+        alert(`Bank Transfer initiated!\nSort Code: ${sortCode}\nAccount Number: ${accountNumber}`);
+        // Here you would process the bank transfer
+        // (e.g., send the details to the server for further processing)
+      }
+    });
+  </script>
 </body>
 </html>
