@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cashout</title>
+  <title>Click for Cash</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,6 +18,9 @@
     .input-field {
       margin: 10px 0;
     }
+    input[disabled] {
+      background-color: #f0f0f0; /* Light gray background for disabled input */
+    }
   </style>
 </head>
 <body>
@@ -30,7 +33,6 @@
 
   <div id="cashoutOptions" class="cashout-options hidden">
     <h3>Select a cashout method:</h3>
-    <button id="paypalButton">Cashout with PayPal</button>
     <button id="bankTransferButton">Cashout with Bank Transfer</button>
   </div>
 
@@ -38,13 +40,13 @@
     <h3>Enter your Bank Transfer details:</h3>
     <div class="input-field">
       <label for="sortCode">Sort Code:</label>
-      <input type="text" id="sortCode" maxlength="6" placeholder="Enter sort code">
+      <input type="text" id="sortCode" maxlength="6" placeholder="Enter sort code" disabled>
     </div>
     <div class="input-field">
       <label for="accountNumber">Account Number:</label>
-      <input type="text" id="accountNumber" maxlength="8" placeholder="Enter account number">
+      <input type="text" id="accountNumber" maxlength="8" placeholder="Enter account number" disabled>
     </div>
-    <button id="submitBankDetails">Submit Bank Transfer Details</button>
+    <button id="submitBankDetails" disabled>Submit Bank Transfer Details</button>
   </div>
 
   <script>
@@ -54,7 +56,6 @@
     const earnButton = document.getElementById("earnButton");
     const cashoutButton = document.getElementById("cashoutButton");
     const cashoutOptions = document.getElementById("cashoutOptions");
-    const paypalButton = document.getElementById("paypalButton");
     const bankTransferButton = document.getElementById("bankTransferButton");
     const bankDetails = document.getElementById("bankDetails");
     const submitBankDetails = document.getElementById("submitBankDetails");
@@ -74,14 +75,13 @@
       cashoutOptions.classList.remove("hidden");
     });
 
-    // Redirect to PayPal login when PayPal cashout is selected
-    paypalButton.addEventListener("click", () => {
-      window.location.href = "https://www.paypal.com/signin";
-    });
-
     // Show bank details input fields when Bank Transfer is selected
     bankTransferButton.addEventListener("click", () => {
       bankDetails.classList.remove("hidden");
+      // Enable bank details input fields when the button is clicked
+      document.getElementById("sortCode").disabled = false;
+      document.getElementById("accountNumber").disabled = false;
+      submitBankDetails.disabled = false;
     });
 
     // Handle bank details submission
