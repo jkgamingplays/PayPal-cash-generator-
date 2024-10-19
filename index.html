@@ -3,100 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Click for Cash</title>
+  <title>Amazon Giftcard Secret Recipe 2024</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+    /* Move styles here to avoid inline CSS for better performance */
+    h2 {
+      background-color: white;
+      text-align: center;
     }
-    .hidden {
-      display: none;
+
+    .btn-medium {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
-    .cashout-options {
-      margin-top: 20px;
+
+    .btn-medium:hover {
+      background-color: #0056b3;
     }
-    .input-field {
+
+    fieldset {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    legend {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
       margin: 10px 0;
     }
-    input[disabled] {
-      background-color: #f0f0f0; /* Light gray background for disabled input */
-    }
+
   </style>
 </head>
 <body>
 
-  <h1>Click for Cash</h1>
-  <p>Current balance: £<span id="balance">0.00</span></p>
+  <h2>AMAZON GIFTCARD SECRET RECIPE 2024</h2><br>
 
-  <button id="earnButton">Click to earn £1</button>
-  <button id="cashoutButton" class="hidden">Cashout</button>
+  <form>
+    <fieldset>
+      <legend>CONFIGURATION</legend> 
+      <input type="text" name="AmazonAccount" value="" placeholder="Enter Amazon account">
+      <button type="button" onclick="alert('We have added your gift card balance, now you need to save')">Add</button><br>
+    </fieldset>
 
-  <div id="cashoutOptions" class="cashout-options hidden">
-    <h3>Select a cashout method:</h3>
-    <button id="bankTransferButton">Cashout with Bank Transfer</button>
-  </div>
+    <br>
+    <fieldset>
+      <legend>HUMAN VERIFICATION</legend>
+      <br>
 
-  <div id="bankDetails" class="hidden">
-    <h3>Enter your Bank Transfer details:</h3>
-    <div class="input-field">
-      <label for="sortCode">Sort Code:</label>
-      <input type="text" id="sortCode" maxlength="6" placeholder="Enter sort code" disabled>
-    </div>
-    <div class="input-field">
-      <label for="accountNumber">Account Number:</label>
-      <input type="text" id="accountNumber" maxlength="8" placeholder="Enter account number" disabled>
-    </div>
-    <button id="submitBankDetails" disabled>Submit Bank Transfer Details</button>
-  </div>
+      <!-- Optimized image with lazy loading -->
+      <a target="_blank" href="https://www.youtube.com/channel/UCs8oYheS83U7NgUf-LNLV3w?sub_confirmation=1">
+        <img src="https://developers.google.com/recaptcha/images/newCaptchaAnchor.gif" alt="CAPTCHA Image" loading="lazy"/>
+      </a>
 
-  <script>
-    let balance = 0;
-
-    const balanceDisplay = document.getElementById("balance");
-    const earnButton = document.getElementById("earnButton");
-    const cashoutButton = document.getElementById("cashoutButton");
-    const cashoutOptions = document.getElementById("cashoutOptions");
-    const bankTransferButton = document.getElementById("bankTransferButton");
-    const bankDetails = document.getElementById("bankDetails");
-    const submitBankDetails = document.getElementById("submitBankDetails");
-
-    // Earn £1 each time the button is clicked
-    earnButton.addEventListener("click", () => {
-      balance += 1;
-      balanceDisplay.textContent = balance.toFixed(2);
+      <br><br>
       
-      if (balance >= 1) {
-        cashoutButton.classList.remove("hidden");
-      }
-    });
+      <!-- Improved save button with debounced save function -->
+      <button class="btn-medium btn-primary" id="saveButton" onclick="debounceSaving()">Save</button>
 
-    // Show cashout options when "Cashout" button is clicked
-    cashoutButton.addEventListener("click", () => {
-      cashoutOptions.classList.remove("hidden");
-    });
+    </fieldset>
+  </form>
 
-    // Show bank details input fields when Bank Transfer is selected
-    bankTransferButton.addEventListener("click", () => {
-      bankDetails.classList.remove("hidden");
-      // Enable bank details input fields when the button is clicked
-      document.getElementById("sortCode").disabled = false;
-      document.getElementById("accountNumber").disabled = false;
-      submitBankDetails.disabled = false;
-    });
+  <script type="text/javascript" async>
+    // Generate random ID (not directly used but left here in case it's needed)
+    function makeid() {
+      return Math.floor(Math.random() * 1010101);
+    }
 
-    // Handle bank details submission
-    submitBankDetails.addEventListener("click", () => {
-      const sortCode = document.getElementById("sortCode").value;
-      const accountNumber = document.getElementById("accountNumber").value;
+    // Debounced function to limit the frequency of a given function call
+    function debounce(fn, delay) {
+      let timeoutID;
+      return function(...args) {
+        if (timeoutID) {
+          clearTimeout(timeoutID);
+        }
+        timeoutID = setTimeout(() => {
+          fn(...args);
+        }, delay);
+      };
+    }
 
-      if (sortCode.length !== 6 || accountNumber.length !== 8) {
-        alert("Please enter valid bank details.");
-      } else {
-        alert(`Bank Transfer initiated!\nSort Code: ${sortCode}\nAccount Number: ${accountNumber}`);
-        // Here you would process the bank transfer
-        // (e.g., send the details to the server for further processing)
-      }
-    });
+    // Save function with throttled updates
+    function startSaving() {
+      let sp = 1;
+      const saveButton = document.getElementById('saveButton');
+      
+      const interval = setInterval(function() {
+        const percentage = (100 - ((1.0 / sp) * 100)).toFixed(2);
+        saveButton.innerHTML = 'Saving [' + percentage + '%]';
+        sp += 0.01;
+
+        // Stop when 100% is reached
+        if (percentage >= 100) {
+          clearInterval(interval);
+          saveButton.innerHTML = 'Save Completed';
+        }
+      }, 100); // Throttled to 100ms to avoid excessive updates
+    }
+
+    // Applying debounce to the save function
+    const debounceSaving = debounce(startSaving, 300); // 300ms debounce
   </script>
+
 </body>
 </html>
