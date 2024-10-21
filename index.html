@@ -1,121 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amazon Giftcard Secret Recipe 2024</title>
-  <style>
-    /* Move styles here to avoid inline CSS for better performance */
-    h2 {
-      background-color: white;
-      text-align: center;
-    }
-
-    .btn-medium {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-medium:hover {
-      background-color: #0056b3;
-    }
-
-    fieldset {
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin: 20px 0;
-    }
-
-    legend {
-      font-weight: bold;
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    button {
-      margin: 10px 0;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashout App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        #balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 
-  <h2>AMAZON GIFTCARD SECRET RECIPE 2024</h2><br>
+    <div id="balance">£0.00</div>
+    <button class="button" id="earnButton">Earn 50p</button>
+    <button class="button" id="cashoutButton">Cashout</button>
 
-  <form>
-    <fieldset>
-      <legend>CONFIGURATION</legend> 
-      <input type="text" name="AmazonAccount" value="" placeholder="Enter Amazon account">
-      <button type="button" onclick="alert('We have added your gift card balance, now you need to save')">Add</button><br>
-    </fieldset>
+    <script>
+        let balance = 0;
 
-    <br>
-    <fieldset>
-      <legend>HUMAN VERIFICATION</legend>
-      <br>
-
-      <!-- Optimized image with lazy loading -->
-      <a target="_blank" href="https://www.youtube.com/channel/UCs8oYheS83U7NgUf-LNLV3w?sub_confirmation=1">
-        <img src="https://developers.google.com/recaptcha/images/newCaptchaAnchor.gif" alt="CAPTCHA Image" loading="lazy"/>
-      </a>
-
-      <br><br>
-      
-      <!-- Improved save button with debounced save function -->
-      <button class="btn-medium btn-primary" id="saveButton" onclick="debounceSaving()">Save</button>
-
-    </fieldset>
-  </form>
-
-  <script type="text/javascript" async>
-    // Generate random ID (not directly used but left here in case it's needed)
-    function makeid() {
-      return Math.floor(Math.random() * 1010101);
-    }
-
-    // Debounced function to limit the frequency of a given function call
-    function debounce(fn, delay) {
-      let timeoutID;
-      return function(...args) {
-        if (timeoutID) {
-          clearTimeout(timeoutID);
+        // Function to update the displayed balance
+        function updateBalance() {
+            document.getElementById('balance').innerText = `£${(balance / 2).toFixed(2)}`;
         }
-        timeoutID = setTimeout(() => {
-          fn(...args);
-        }, delay);
-      };
-    }
 
-    // Save function with throttled updates
-    function startSaving() {
-      let sp = 1;
-      const saveButton = document.getElementById('saveButton');
-      
-      const interval = setInterval(function() {
-        const percentage = (100 - ((1.0 / sp) * 100)).toFixed(2);
-        saveButton.innerHTML = 'Saving [' + percentage + '%]';
-        sp += 0.01;
+        // Event listener for earning 50p
+        document.getElementById('earnButton').addEventListener('click', function() {
+            balance += 50; // Increment balance by 50p
+            updateBalance();
+        });
 
-        // Stop when 100% is reached
-        if (percentage >= 100) {
-          clearInterval(interval);
-          saveButton.innerHTML = 'Save Completed';
-        }
-      }, 100); // Throttled to 100ms to avoid excessive updates
-    }
-
-    // Applying debounce to the save function
-    const debounceSaving = debounce(startSaving, 300); // 300ms debounce
-  </script>
+        // Event listener for cashing out
+        document.getElementById('cashoutButton').addEventListener('click', function() {
+            alert('Cashout with PayPal');
+            // Here you can add your PayPal integration logic later
+        });
+    </script>
 
 </body>
 </html>
