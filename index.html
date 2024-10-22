@@ -3,54 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashout App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #4CAF50; /* Green */
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        #balance {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Earnings Tracker</title>
 </head>
 <body>
 
-    <div id="balance">£0.00</div>
-    <button class="button" id="earnButton">Earn 50p</button>
-    <button class="button" id="cashoutButton">Cashout</button>
+    <!-- Display the current balance -->
+    <h1>Balance: £<span id="balance">0.00</span></h1>
+
+    <!-- Button to earn £0.50 per click -->
+    <button id="earnBtn">Earn £0.50</button>
+
+    <!-- Cashout Button -->
+    <button id="cashoutBtn">Cash Out</button>
+
+    <!-- Cashout Form (hidden by default) -->
+    <div id="cashoutForm" style="display:none;">
+        <h3>Select Cashout Option</h3>
+        <label>
+            <input type="radio" name="cashoutOption" value="paypal" required> PayPal
+        </label>
+        <label>
+            <input type="radio" name="cashoutOption" value="amazon" required> Amazon
+        </label>
+        <br><br>
+        <label for="email">Enter your email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+
+        <!-- CAPTCHA Verification -->
+        <div id="captcha">
+            <!-- You can replace this with a real CAPTCHA -->
+            <label><input type="checkbox" id="captchaCheckbox" required> I'm not a robot</label>
+        </div>
+        <br>
+
+        <button id="submitCashout">Submit Cashout</button>
+    </div>
 
     <script>
-        let balance = 0;
+        let balance = 0.00; // Initial balance
 
-        // Function to update the displayed balance
-        function updateBalance() {
-            document.getElementById('balance').innerText = `£${(balance / 2).toFixed(2)}`;
-        }
-
-        // Event listener for earning 50p
-        document.getElementById('earnButton').addEventListener('click', function() {
-            balance += 50; // Increment balance by 50p
-            updateBalance();
+        // Handle Earn Button click
+        document.getElementById('earnBtn').addEventListener('click', function() {
+            balance += 0.50; // Increase balance by £0.50
+            document.getElementById('balance').innerText = balance.toFixed(2); // Update display
         });
 
-        // Event listener for cashing out
-        document.getElementById('cashoutButton').addEventListener('click', function() {
-            alert('Cashout with PayPal');
-            // Here you can add your PayPal integration logic later
+        // Handle Cash Out Button click
+        document.getElementById('cashoutBtn').addEventListener('click', function() {
+            if (balance >= 1.00) { // Allow cashout only if balance is >= £1.00
+                document.getElementById('cashoutForm').style.display = 'block'; // Show cashout form
+            } else {
+                alert('You need at least £1.00 to cash out.');
+            }
+        });
+
+        // Handle Cashout Submission
+        document.getElementById('submitCashout').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const cashoutOption = document.querySelector('input[name="cashoutOption"]:checked').value;
+            const captchaVerified = document.getElementById('captchaCheckbox').checked;
+
+            if (captchaVerified) {
+                alert(`Cashout request submitted for ${cashoutOption.toUpperCase()} to ${email}`);
+                balance = 0; // Reset balance after cashout
+                document.getElementById('balance').innerText = balance.toFixed(2);
+                document.getElementById('cashoutForm').style.display = 'none'; // Hide form after submission
+            } else {
+                alert('Please verify the CAPTCHA.');
+            }
         });
     </script>
 
