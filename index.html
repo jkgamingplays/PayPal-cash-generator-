@@ -3,45 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earnings Tracker</title>
+    <title>Payout Test</title>
 </head>
 <body>
+    <h1>Payout Demo</h1>
 
-    <!-- Display the current balance -->
-    <h1>Balance: £<span id="balance">0.00</span></h1>
+    <p>Balance: £<span id="balance">0.00</span></p>
 
-    <!-- Button to earn £0.50 per click -->
+    <!-- Earn Button -->
     <button id="earnBtn">Earn £0.50</button>
 
+    <!-- Cashout Section -->
+    <h2>Cashout</h2>
+    <label for="email">Enter Email for PayPal:</label>
+    <input type="email" id="email" placeholder="Enter your PayPal email" required>
+    
+    <!-- Select Payout Option -->
+    <label for="payoutOption">Select Cashout Option:</label>
+    <select id="payoutOption">
+        <option value="paypal">PayPal</option>
+        <option value="amazon">Amazon Gift Card</option>
+    </select>
+
+    <!-- CAPTCHA -->
+    <label>
+        <input type="checkbox" id="captchaCheckbox"> I am not a robot
+    </label>
+    
     <!-- Cashout Button -->
-    <button id="cashoutBtn">Cash Out</button>
+    <button id="submitCashout">Cashout</button>
 
-    <!-- Cashout Form (hidden by default) -->
-    <div id="cashoutForm" style="display:none;">
-        <h3>Select Cashout Option</h3>
-        <label>
-            <input type="radio" name="cashoutOption" value="paypal" required> PayPal
-        </label>
-        <label>
-            <input type="radio" name="cashoutOption" value="amazon" required> Amazon
-        </label>
-        <br><br>
-        <label for="email">Enter your email:</label>
-        <input type="email" id="email" name="email" required>
-        <br><br>
+    <!-- Check Status Section -->
+    <h2>Check Payout Status</h2>
+    <button id="checkStatusBtn">Check Cashout Status</button>
+    <p>Status: <span id="cashoutStatus">N/A</span></p>
 
-        <!-- CAPTCHA Verification -->
-        <div id="captcha">
-            <!-- You can replace this with a real CAPTCHA -->
-            <label><input type="checkbox" id="captchaCheckbox" required> I'm not a robot</label>
-        </div>
-        <br>
-
-        <button id="submitCashout">Submit Cashout</button>
-    </div>
-
+    <!-- Scripts -->
     <script>
         let balance = 0.00; // Initial balance
+        let payoutBatchId = null; // Store payout batch ID
 
         // Handle Earn Button click
         document.getElementById('earnBtn').addEventListener('click', function() {
@@ -50,30 +50,64 @@
         });
 
         // Handle Cash Out Button click
-        document.getElementById('cashoutBtn').addEventListener('click', function() {
-            if (balance >= 1.00) { // Allow cashout only if balance is >= £1.00
-                document.getElementById('cashoutForm').style.display = 'block'; // Show cashout form
+        document.getElementById('submitCashout').addEventListener('click', async function() {
+            const email = document.getElementById('email').value;
+            const amount = balance; // Send the current balance
+            const captchaVerified = document.getElementById('captchaCheckbox').checked;
+            const cashoutOption = document.getElementById('payoutOption').value;
+
+            if (captchaVerified && email) {
+                try {
+                    const response = await fetch('/api/paypal-payout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, amount, cashoutOption })
+                    });
+                    const data = await response.json();
+                    
+                    if (data.payoutBatchId) {
+                        payoutBatchId = data.payoutBatchId;
+                        alert('Cashout request submitted. Tracking ID: ' + payoutBatchId);
+                        balance = 0; // Reset balance after cashout
+                        document.getElementById('balance').innerText = balance.toFixed(2);
+                    } else {
+                        alert('Error in processing payout: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
             } else {
-                alert('You need at least £1.00 to cash out.');
+                alert('Please verify the CAPTCHA and enter a valid email.');
             }
         });
 
-        // Handle Cashout Submission
-        document.getElementById('submitCashout').addEventListener('click', function() {
-            const email = document.getElementById('email').value;
-            const cashoutOption = document.querySelector('input[name="cashoutOption"]:checked').value;
-            const captchaVerified = document.getElementById('captchaCheckbox').checked;
-
-            if (captchaVerified) {
-                alert(`Cashout request submitted for ${cashoutOption.toUpperCase()} to ${email}`);
-                balance = 0; // Reset balance after cashout
-                document.getElementById('balance').innerText = balance.toFixed(2);
-                document.getElementById('cashoutForm').style.display = 'none'; // Hide form after submission
+        // Handle Check Status Button
+        document.getElementById('checkStatusBtn').addEventListener('click', async function() {
+            if (payoutBatchId) {
+                try {
+                    const response = await fetch('/api/paypal-check-status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ payoutBatchId })
+                    });
+                    const data = await response.json();
+                    document.getElementById('cashoutStatus').innerText = data.status;
+                    if (data.status === 'SUCCESS') {
+                        alert('Your cashout has been processed successfully!');
+                    } else if (data.status === 'FAILED') {
+                        alert('Cashout failed. Please try again later.');
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
             } else {
-                alert('Please verify the CAPTCHA.');
+                alert('No payout request to track.');
             }
         });
     </script>
-
 </body>
 </html>
