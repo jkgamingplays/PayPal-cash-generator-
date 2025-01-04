@@ -1,113 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payout Test</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glastonbury 2025 Admin Ticket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .ticket {
+      width: 600px;
+      padding: 20px;
+      border: 2px solid #6ab04c;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .ticket h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .ticket p {
+      margin: 5px 0;
+      color: #555;
+    }
+    .ticket .benefits {
+      text-align: left;
+      margin: 20px 0;
+    }
+    .ticket .benefits ul {
+      list-style: none;
+      padding: 0;
+    }
+    .ticket .benefits li {
+      margin: 5px 0;
+      color: #333;
+    }
+    .ticket .qr-code {
+      margin-top: 20px;
+    }
+    .ticket .qr-code img {
+      width: 150px;
+      height: 150px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Payout Demo</h1>
-
-    <p>Balance: £<span id="balance">0.00</span></p>
-
-    <!-- Earn Button -->
-    <button id="earnBtn">Earn £0.50</button>
-
-    <!-- Cashout Section -->
-    <h2>Cashout</h2>
-    <label for="email">Enter Email for PayPal:</label>
-    <input type="email" id="email" placeholder="Enter your PayPal email" required>
-    
-    <!-- Select Payout Option -->
-    <label for="payoutOption">Select Cashout Option:</label>
-    <select id="payoutOption">
-        <option value="paypal">PayPal</option>
-        <option value="amazon">Amazon Gift Card</option>
-    </select>
-
-    <!-- CAPTCHA -->
-    <label>
-        <input type="checkbox" id="captchaCheckbox"> I am not a robot
-    </label>
-    
-    <!-- Cashout Button -->
-    <button id="submitCashout">Cashout</button>
-
-    <!-- Check Status Section -->
-    <h2>Check Payout Status</h2>
-    <button id="checkStatusBtn">Check Cashout Status</button>
-    <p>Status: <span id="cashoutStatus">N/A</span></p>
-
-    <!-- Scripts -->
-    <script>
-        let balance = 0.00; // Initial balance
-        let payoutBatchId = null; // Store payout batch ID
-
-        // Handle Earn Button click
-        document.getElementById('earnBtn').addEventListener('click', function() {
-            balance += 0.50; // Increase balance by £0.50
-            document.getElementById('balance').innerText = balance.toFixed(2); // Update display
-        });
-
-        // Handle Cash Out Button click
-        document.getElementById('submitCashout').addEventListener('click', async function() {
-            const email = document.getElementById('email').value;
-            const amount = balance; // Send the current balance
-            const captchaVerified = document.getElementById('captchaCheckbox').checked;
-            const cashoutOption = document.getElementById('payoutOption').value;
-
-            if (captchaVerified && email) {
-                try {
-                    const response = await fetch('/api/paypal-payout', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, amount, cashoutOption })
-                    });
-                    const data = await response.json();
-                    
-                    if (data.payoutBatchId) {
-                        payoutBatchId = data.payoutBatchId;
-                        alert('Cashout request submitted. Tracking ID: ' + payoutBatchId);
-                        balance = 0; // Reset balance after cashout
-                        document.getElementById('balance').innerText = balance.toFixed(2);
-                    } else {
-                        alert('Error in processing payout: ' + data.error);
-                    }
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                }
-            } else {
-                alert('Please verify the CAPTCHA and enter a valid email.');
-            }
-        });
-
-        // Handle Check Status Button
-        document.getElementById('checkStatusBtn').addEventListener('click', async function() {
-            if (payoutBatchId) {
-                try {
-                    const response = await fetch('/api/paypal-check-status', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ payoutBatchId })
-                    });
-                    const data = await response.json();
-                    document.getElementById('cashoutStatus').innerText = data.status;
-                    if (data.status === 'SUCCESS') {
-                        alert('Your cashout has been processed successfully!');
-                    } else if (data.status === 'FAILED') {
-                        alert('Cashout failed. Please try again later.');
-                    }
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                }
-            } else {
-                alert('No payout request to track.');
-            }
-        });
-    </script>
+  <div class="ticket">
+    <h1>🎫 Glastonbury 2025 Admin Ticket 🎫</h1>
+    <p><strong>Mohammed Joseph Khan</strong></p>
+    <p>Admin Ticket - Glastonbury 2025</p>
+    <p><strong>Event Dates:</strong> Wednesday, 25th June – Sunday, 29th June 2025</p>
+    <p><strong>Arrival Date:</strong> Tuesday, 24th June 2025 (Early Admissions)</p>
+    <p><strong>Location:</strong> Merriman Park, Street, Somerset</p>
+    <div class="benefits">
+      <strong>Admin Ticket Benefits:</strong>
+      <ul>
+        <li>- Priority Access to the Event</li>
+        <li>- Backstage Area Permissions</li>
+        <li>- Complimentary Refreshments</li>
+        <li>- Access to Setup Areas</li>
+        <li>- Reserved Parking</li>
+      </ul>
+    </div>
+    <div class="qr-code">
+      <img src="https://via.placeholder.com/150" alt="QR Code">
+    </div>
+    <p>Present this ticket and scan the QR code for entry.</p>
+  </div>
 </body>
 </html>
