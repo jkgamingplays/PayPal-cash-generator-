@@ -1,1 +1,0 @@
-# PayPal-cash-generator-
